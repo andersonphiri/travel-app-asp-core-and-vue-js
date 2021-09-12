@@ -36,6 +36,8 @@ namespace Travel.Application.TourLists.Commands.UpdateTourList
                 throw new NotFoundException(nameof(TourList), request.Id);
             }
             entity.City = request.City;
+            entity.Country = request.Country;
+            entity.About = request.About;
             await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

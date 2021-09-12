@@ -44,7 +44,7 @@ namespace Travel.Identity.Helpers
                     ClockSkew = TimeSpan.Zero
                 }, out var validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(c => c.Type == "id").Value);
+                var userId = int.Parse(jwtToken.Claims.First(c => c.Type == "sub").Value);
                 context.Items["User"] = userService.GetById(userId);
             }
             catch (Exception)

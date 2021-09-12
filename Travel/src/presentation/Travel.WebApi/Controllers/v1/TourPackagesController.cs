@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Travel.Application.Dtos.Tour;
 using Travel.Application.TourPackages.Commands.CreateTourPackage;
 using Travel.Application.TourPackages.Commands.DeleteTourPackage;
 using Travel.Application.TourPackages.Commands.UpdateTourPackage;
 using Travel.Application.TourPackages.Commands.UpdateTourPackageDetail;
+using Travel.Application.TourPackages.Queries;
 using Travel.Data.Contexts;
 using Travel.Domain.Entities;
 
@@ -18,6 +20,12 @@ namespace Travel.WebApi.Controllers.v1
     //[ApiController]
     public class TourPackagesController : ApiController
     {
+
+        [HttpGet]
+        public async Task<ActionResult<List<TourPackageDto>>> GetTourPackages([FromQuery] GetTourPackagesQuery query)
+        {
+            return await Mediator.Send(query);
+        }
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateTourPackageCommand command)
         {
