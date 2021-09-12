@@ -18,6 +18,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Travel.Application;
 using Travel.Data;
 using Travel.Data.Contexts;
+using Travel.Identity;
+using Travel.Identity.Helpers;
 using Travel.Shared;
 using Travel.WebApi.Filters;
 using Travel.WebApi.Helpers;
@@ -43,7 +45,7 @@ namespace Travel.WebApi
             services.AddApplication();
             services.AddInfrastructureData("Data Source=TravelTourDatabase.sqlite3");
             services.AddInfrastructureShared(Configuration);
-
+            services.AddInfrastructureIdentity(Configuration);
             services.AddHttpContextAccessor();
 
             services.AddControllers();
@@ -61,6 +63,30 @@ namespace Travel.WebApi
 
                
                 c.OperationFilter<SwaggerDefaultValues>();
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        }, new List<string>()
+                    }
+                });
+
             });
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
@@ -107,6 +133,7 @@ namespace Travel.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseAuthorization();
 
