@@ -10,10 +10,10 @@ using Travel.Data.Contexts;
 using Travel.Domain.Entities;
 
 
-namespace Travel.WebApi.Controllers
+namespace Travel.WebApi.Controllers.v1
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
     public class TourListsController : ApiController
     {
         [HttpGet]

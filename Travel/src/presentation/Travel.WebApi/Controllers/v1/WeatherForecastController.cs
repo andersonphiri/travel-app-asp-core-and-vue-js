@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Travel.WebApi.Controllers
+namespace Travel.WebApi.Controllers.v1
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+   
+    [ApiVersion("1.0", Deprecated = true)]
+    public class WeatherForecastController : ApiController
     {
         private static readonly string[] Summaries = new[]
         {
