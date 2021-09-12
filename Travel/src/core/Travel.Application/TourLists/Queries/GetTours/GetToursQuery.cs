@@ -2,6 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,21 +24,44 @@ namespace Travel.Application.TourLists.Queries.GetTours
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IDistributedCache _distributedCache;
 
-        public GetToursQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public GetToursQueryHandler(IApplicationDbContext context, IMapper mapper, IDistributedCache distributedCache)
         {
             _context = context;
             _mapper = mapper;
+            _distributedCache = distributedCache;
         }
         public async Task<ToursVm> Handle(GetToursQuery request, CancellationToken cancellationToken)
         {
-            return new ToursVm
+            const string cacheKey = "GetTours";
+            ToursVm tourLists = null;
+            string serializedTourList = null;
+            var cached = await _distributedCache.GetAsync(cacheKey, cancellationToken);
+
+            if (cached is null)
             {
-                Lists = await _context.TourLists
+                tourLists = new ToursVm
+                {
+                    Lists = await _context.TourLists
                   .ProjectTo<TourListDto>(_mapper.ConfigurationProvider)
                   .OrderBy(t => t.City)
                   .ToListAsync(cancellationToken)
-            };
+                };
+                serializedTourList = JsonConvert.SerializeObject(tourLists);
+                cached = Encoding.UTF8.GetBytes(serializedTourList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(1));
+                await _distributedCache.SetAsync(cacheKey, cached, options, cancellationToken);
+
+                return tourLists;
+            }
+
+            serializedTourList = Encoding.UTF8.GetString(cached);
+            tourLists = JsonConvert.DeserializeObject<ToursVm>(serializedTourList);
+
+            return tourLists;
         }
     }
 
