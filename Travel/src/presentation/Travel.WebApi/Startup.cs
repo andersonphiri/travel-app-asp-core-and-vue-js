@@ -24,6 +24,7 @@ using Travel.Shared;
 using Travel.WebApi.Extensions;
 using Travel.WebApi.Filters;
 using Travel.WebApi.Helpers;
+using VueCliMiddleware;
 
 namespace Travel.WebApi
 {
@@ -57,8 +58,11 @@ namespace Travel.WebApi
             services.AddSwaggerGenExtension();
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-            
-
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "../vue-app/dist";
+            });
+            services.AddCors();
 
 
         }
@@ -71,7 +75,17 @@ namespace Travel.WebApi
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerExtension(provider);
             }
-
+            app.UseStaticFiles();
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles();
+            }
+            app.UseCors(b =>
+            {
+                b.AllowAnyOrigin();
+                b.AllowAnyHeader();
+                b.AllowAnyMethod();
+            });
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -82,6 +96,14 @@ namespace Travel.WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "../vue-app";
+                if(env.IsDevelopment())
+                {
+                    spa.UseVueCli(npmScript: "serve");
+                }
             });
         }
     }
