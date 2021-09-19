@@ -5,6 +5,13 @@ const mutations = {
     },
     [types.LOADING_TOUR](state, value) {
         state.loading = value;
-    }
+    },
+    [types.REMOVE_TOUR_LIST](state, id) {
+        state.lists = state.lists.filter((tl) => tl.id !== id);
+        state.packagesOfSelectedCity = [];
+      },
+      [types.ADD_TOUR_LIST](state, tourList) {
+        state.lists.unshift(tourList);
+      },
 };
 export default mutations;

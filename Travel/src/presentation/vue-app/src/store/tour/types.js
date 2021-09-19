@@ -1,2 +1,4 @@
 export const LOADING_TOUR = "LOADING_TOUR";
 export const GET_TOUR_LISTS = "GET_TOUR_LISTS";
+export const REMOVE_TOUR_LIST = "REMOVE_TOUR_LIST";
+export const ADD_TOUR_LIST = "ADD_TOUR_LIST";
