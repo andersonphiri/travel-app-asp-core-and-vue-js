@@ -4,8 +4,12 @@
     Dashboard</div>
     <div class="default-content">
             <div style="margin-right: 4rem; margin-bottom: 4rem">
-              <TourListsCard />
+              <TourListsCard @handleShowPackages="handleShowPackages" />
               <AddTourListForm />
+          </div>
+          <div v-if="showPackages">
+            <tour-packages-card />
+            <add-tour-package-form :tourListId="tourListId" />
           </div>
     </div>
   </div>
@@ -14,16 +18,25 @@
 import { mapActions } from "vuex"
 import TourListsCard from "@/components/TourListsCard";
 import AddTourListForm from "@/components/AddTourListForm";
+import TourPackagesCard from "@/components/TourPackagesCard";
+import AddTourPackageForm from '../../components/AddTourPackageForm.vue';
+//import TourPackagesCard from '../../components/TourPackagesCard.vue';
 export default {
   name: "DefaultContent",
   mounted() {
     this.getTourListsAction();
+    this.showPackages = false;
   },
   methods: {
     ...mapActions("tourModule", ["getTourListsAction"]),
+    handleShowPackages(show, listId) {
+      this.showPackages = show;
+      this.tourListId = listId;
+    }
 
   },
-    components: { TourListsCard, AddTourListForm, },
+    components: { TourListsCard, AddTourListForm,  TourPackagesCard, AddTourPackageForm,  },
+    data: () => ({ showPackages: false, tourListId:0, }),
 };
 </script>
 <style scoped>
