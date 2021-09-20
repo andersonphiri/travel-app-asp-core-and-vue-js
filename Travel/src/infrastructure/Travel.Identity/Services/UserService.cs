@@ -22,7 +22,7 @@ namespace Travel.Identity.Services
                 Id = 1,
                 FirstName = "Yourname",
                 LastName = "Yoursurname",
-                Username = "yoursuperhero",
+                Username = "yoursuperhero@gmail.com",
                 Password = "Pass123!"
             }
         };
@@ -50,7 +50,7 @@ namespace Travel.Identity.Services
             byte[] key = Encoding.ASCII.GetBytes(_authSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("sub", user.Id.ToString()), new Claim("email", user.Email) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("sub", user.Id.ToString()), new Claim("email", user.Email ?? user.Username) }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
