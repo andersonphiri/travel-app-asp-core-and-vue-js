@@ -27,13 +27,20 @@
         <form @submit.prevent="onSubmit">
           <v-row>
             <v-col cols="12">
-              <v-text-field label="E-mail" v-model="login.email"></v-text-field>
+              <v-text-field label="E-mail" 
+              @input="$v.login.email.$touch()"
+            @blur="$v.login.email.$touch()"
+            :error-messages="emailErrors"
+              v-model="login.email"></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
                 type="password" label="Password"
                 hint="At least 8 characters"
                 v-model="login.password" counter
+                @input="$v.login.password.$touch()"
+                @blur="$v.login.password.$touch()"
+                :error-messages="passwordErrors"
               ></v-text-field>
             </v-col>
             <v-col class="d-flex" cols="12" sm="6" xsm="12"> 
@@ -103,6 +110,7 @@
 <script>
 import { mapActions } from "vuex";
 import router from "@/router";
+import validators from "@/validators";
 export default {
   name: "Login",
   data: () => ({
@@ -124,5 +132,25 @@ export default {
       router.push("/");
     },
   },
+    computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.login.email.$dirty) return errors;
+      !this.$v.login.email.email && errors.push("Must be  valid e-mail");
+      !this.$v.login.email.required && errors.push("E-mail is required");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.login.password.$dirty) return errors;
+      !this.$v.login.password.required &&  errors.push("Password is required");
+      !this.$v.login.password.minLength && errors.push("Minimum characters is 8");
+      return errors;
+    },
+  },
+  validations: {
+    login: validators.login,
+  },
+
 };
 </script>

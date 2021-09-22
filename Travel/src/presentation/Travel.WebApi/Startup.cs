@@ -42,7 +42,7 @@ namespace Travel.WebApi
         {
 
             services.AddApplication(Configuration);
-            services.AddInfrastructureData("Data Source=TravelTourDatabase.sqlite3");
+            services.AddInfrastructureData(Configuration);
             services.AddInfrastructureShared(Configuration);
             services.AddInfrastructureIdentity(Configuration);
             services.AddHttpContextAccessor();

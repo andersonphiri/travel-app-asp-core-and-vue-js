@@ -10,11 +10,11 @@ namespace Travel.Data.Migrations
                 name: "TourLists",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    City = table.Column<string>(type: "TEXT", nullable: true),
-                    Country = table.Column<string>(type: "TEXT", nullable: true),
-                    About = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,16 +25,16 @@ namespace Travel.Data.Migrations
                 name: "TourPackages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ListId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    WhatToExpect = table.Column<string>(type: "TEXT", nullable: true),
-                    MapLocation = table.Column<string>(type: "TEXT", nullable: true),
-                    Price = table.Column<float>(type: "REAL", nullable: false),
-                    Duration = table.Column<int>(type: "INTEGER", nullable: false),
-                    InstantConfirmation = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Currency = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ListId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WhatToExpect = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MapLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    InstantConfirmation = table.Column<bool>(type: "bit", nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
