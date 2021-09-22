@@ -18,7 +18,7 @@ namespace Application.UnitTests.Common.Exceptions
         }
 
         [Fact]
-        public void SingleValidationFailure 
+        public void //  
         CreatesASingleElementErrorDictionary()
         {
             var failures = new List<ValidationFailure>

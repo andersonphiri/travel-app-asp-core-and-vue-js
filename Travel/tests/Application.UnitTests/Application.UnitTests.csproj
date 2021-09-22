@@ -24,8 +24,4 @@
     <ProjectReference Include="..\..\src\core\Travel.Application\Travel.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Mappings\" />
-  </ItemGroup>
-
 </Project>
